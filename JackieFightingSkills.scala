@@ -12,8 +12,7 @@ import scala.util.control.ControlThrowable
 /**
   * Created by ravikumar.yandra on 3/25/2017.
   */
-case class Record(timestamp: String, style: String, action: String, weapon: String, target: String,
-                  strength: Long)
+case class Record(timestamp: String, style: String, action: String, weapon: String, target: String,strength: Long)
 
 class JackieFightingSkills {
   var body :Double =30.0
@@ -23,51 +22,6 @@ class JackieFightingSkills {
   var KUNG_FU : Long =0
   var WUSHU :Long =0
   var weapon:String=""
-
-  /*def JackieFightingSkillsTest(): Unit = {
-    val conf = new SparkConf().setAppName("Jackie Skills").setMaster("local")
-    val sc = new SparkContext(conf)
-    val seq = new SQLContext(sc)
-
-    //var body1 = sc.broadcast[Long](30)
-    val jakieData = seq.read.json("c:\\Data\\test.json")
-    jakieData.registerTempTable("JakieData")
-    val jakieActions = seq.sql("select strength,target,style,weapon from JakieData where action in ('KICK','PUNCH')").toDF()
-
-    breakable {
-      jakieActions.foreach(i => {
-        try {
-
-          if(i.get(2).toString == "DRUNKEN_BOXING") DRUNKEN_BOXING += 1
-          if(i.get(2).toString == "KUNG_FU") KUNG_FU += 1
-          if(i.get(2).toString == "WUSHU") WUSHU += 1
-
-          if (i.get(1).toString == "BODY") {
-            body = body - i.getLong(0)
-            if (body <= 1) weapon=i.get(3).toString //break
-          }
-          if (i.get(1).toString == "HEAD") {
-            head = head - i.getLong(0)
-            if (head <= 1) weapon=i.get(3).toString //break
-          }
-          if (i.get(1).toString == "ARMS") {
-            armslegs = armslegs - i.getLong(0)
-            if (armslegs <= 1) weapon=i.get(3).toString //break
-          }
-          if (i.get(1).toString == "LEGS") {
-            armslegs = armslegs - i.getLong(0)
-            if (armslegs <= 1) weapon=i.get(3).toString //break
-          }
-        }catch{
-          case c: ControlThrowable => throw c
-          case t: Throwable => t.printStackTrace
-        }
-      })
-    }
-    var maxStyles : String = maxValue(DRUNKEN_BOXING,KUNG_FU,WUSHU)
-
-    println("Body:"+ body +" HEAD:" +head +" ARMS&LEGS:" + armslegs +" Max Styles:" +maxStyles + " Weapong:" + weapon)
-  }*/
 
   def JackieFightingSkillsTest(r: RDD[String], seq: SQLContext): Unit = {
     import seq.implicits._
