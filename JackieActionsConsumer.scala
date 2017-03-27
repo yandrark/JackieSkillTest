@@ -1,7 +1,6 @@
 package assignment
 
 import java.util.{Collections, Properties}
-
 import org.apache.kafka.clients.consumer.{ConsumerConfig, ConsumerRecord, ConsumerRecords, KafkaConsumer}
 import org.apache.kafka.common.serialization.StringDeserializer
 import org.apache.spark.rdd.RDD
@@ -10,14 +9,14 @@ import org.apache.spark.storage.StorageLevel
 import org.apache.spark.{SparkConf, SparkContext}
 import org.apache.spark.streaming.{Seconds, StreamingContext}
 import org.apache.spark.streaming.kafka.KafkaUtils
-
-
 import scala.collection.JavaConverters._
+
 /**
   * Created by ravikumar.yandra on 3/26/2017.
   */
 object JackieActionsConsumer {
 
+  //Defining properties required for Kafka consumer
   var topic:String = "test"
   val props = new Properties()
   props.put("bootstrap.servers", "localhost:9092")
@@ -28,12 +27,13 @@ object JackieActionsConsumer {
   props.put("key.deserializer", "org.apache.kafka.common.serialization.StringDeserializer")
   props.put("value.deserializer", "org.apache.kafka.common.serialization.StringDeserializer")
 
-    def KafkaConsumer(props: Properties): Unit = {
+  def KafkaConsumer(props: Properties): Unit = {
 
     val consumer = new KafkaConsumer[String, String](props)
     consumer.subscribe(Collections.singletonList(this.topic))
   }
 
+  //Creating kafka streaming using Spark streaming context
   def createKafkaStream(ssc : StreamingContext) = {
     val zkQuorum = "localhost:2181"
     val topicMap: Map[String, Int] = Map("test" -> 1)
@@ -43,6 +43,7 @@ object JackieActionsConsumer {
     KafkaUtils.createStream(ssc, zkQuorum, "SparkConsumer", topicMap)
   }
 
+  //main
   def main(args: Array[String]): Unit = {
     val config = new SparkConf().setMaster("local").setAppName("KafkaSparkStreaming")
     val sc = SparkContext.getOrCreate(config)
@@ -59,5 +60,4 @@ object JackieActionsConsumer {
     ssc.start()
     ssc.awaitTermination()
   }
-
 }
