@@ -32,17 +32,8 @@ object JackieActionsConsumer {
 
     val consumer = new KafkaConsumer[String, String](props)
     consumer.subscribe(Collections.singletonList(this.topic))
-
-/**    while (true) {
-      val records:ConsumerRecords[String,String] = consumer.poll(1000)
-      for (record:ConsumerRecord[String,String] <- records) {
-        val obj = new JackieFightingSkills()
-        obj.JackieFightingSkillsTest()
-        System.out.println("Received message: (" + record.key() + ", " + record.value() + ") at offset " + record.offset())
-      }
-    }
-  */
   }
+
   def createKafkaStream(ssc : StreamingContext) = {
     val zkQuorum = "localhost:2181"
     val topicMap: Map[String, Int] = Map("test" -> 1)
