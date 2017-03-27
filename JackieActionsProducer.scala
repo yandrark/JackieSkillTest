@@ -10,23 +10,11 @@ import org.apache.kafka.clients.producer.{KafkaProducer, ProducerRecord}
 object JackieActionsProducer {
 
   var topicName:String = "test"
-  var fileName:String  = "dataset/Processed_subject101.dat"
+  var fileName:String  = "dataset/JackieFightingSkill.json"
   var isAsync:Boolean = false
   var producer: KafkaProducer[String, String] = null
 
-  def main(args: Array[String]): Unit = {
-      KafkaJakieProducer(topicName,false)
-      var lineCount:Int =0
-      var fis:FileInputStream =new FileInputStream(fileName)
-      var br:BufferedReader = new BufferedReader(new InputStreamReader(fis))
-
-      var line:String = null
-      while((line = br.readLine())!=null){
-        lineCount+=1
-        SendJakieMessage(null, line)
-      }
-  }
-
+  //setting required properties for Kafka producer
   def KafkaJakieProducer(topic:String , isAsync:Boolean){
     var props:Properties = new Properties()
     props.put("bootstrap.servers", "localhost:9092")
@@ -41,9 +29,23 @@ object JackieActionsProducer {
     producer= new KafkaProducer[String, String](props)
     this.isAsync = isAsync
  }
-  def SendJakieMessage(key:String, value:String): Unit ={
+  //Synchronously publishing Jackie fighting skills data to "test" topic careate on the broker localhost:9092
+  def SendJakieMessage(value:String,key:String): Unit ={
      if(!isAsync){
       producer.send(new ProducerRecord[String,String](topicName,key)).get()
+    }
+  }
+
+  def main(args: Array[String]): Unit = {
+    KafkaJakieProducer(topicName,false)
+    var lineCount:Int =0
+    var fis:FileInputStream =new FileInputStream(fileName)
+    var br:BufferedReader = new BufferedReader(new InputStreamReader(fis))
+
+    var line:String = null
+    while((line = br.readLine())!=null){
+      lineCount+=1
+      SendJakieMessage(lineCount+"",line)
     }
   }
 }
