@@ -9,8 +9,12 @@ import org.apache.kafka.clients.producer.{KafkaProducer, ProducerRecord}
   */
 object JackieActionsProducer {
 
+  //Topic name is "test"
   var topicName:String = "test"
-  var fileName:String  = "dataset/JackieFightingSkill.json"
+
+  //Ensure that source file, and path are accurate
+  var fileName:String  = "JackieFightingSkillData.json"
+
   var isAsync:Boolean = false
   var producer: KafkaProducer[String, String] = null
 
